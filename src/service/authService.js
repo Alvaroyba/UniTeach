@@ -49,3 +49,53 @@ export const handleLogout = async (token) => {
     return false;
   }
 };
+
+export const checkFaceIDStatus = async (token) => {
+  try {
+    const response = await axios.get(`${API_URL}/users/2fa/status`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response?.data?.message || "Error al verificar estado de Face ID");
+  }
+};
+
+export const enableFaceID = async (token, password) => {
+  try {
+    const response = await axios.post(
+      `${API_URL}/users/2fa/enable`,
+      { password },
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response?.data?.message || "Error al activar Face ID");
+  }
+};
+
+export const disableFaceID = async (token, password) => {
+  try {
+    const response = await axios.post(
+      `${API_URL}/users/2fa/disable`,
+      { password },
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response?.data?.message || "Error al desactivar Face ID");
+  }
+};
+
+export const verifyFaceIDAssertion = async (token, assertion) => {
+  try {
+    const response = await axios.post(
+      `${API_URL}/users/2fa/verify`,
+      { assertion },
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response?.data?.message || "Error al verificar Face ID");
+  }
+};

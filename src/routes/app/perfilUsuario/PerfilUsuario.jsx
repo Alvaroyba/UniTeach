@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { FormPerfilUsuario } from "./formPerfilUsuario/FormPerfilUsuario";
+import ConfiguracionSeguridad from "./configuracionSeguridad/ConfiguracionSeguridad";
 import { Container, Tab, Tabs, Box, useMediaQuery } from "@mui/material";
 import { useTheme } from "../../../contexts/themeContext";
 import SettingsIcon from "@mui/icons-material/Settings";
+import SecurityIcon from "@mui/icons-material/Security";
 
 export const PerfilUsuario = () => {
   const [tab, setTab] = useState("settings");
@@ -43,6 +45,12 @@ export const PerfilUsuario = () => {
             value="settings"
             label="Cuenta"
           />
+          <Tab
+            icon={<SecurityIcon />}
+            iconPosition="start"
+            value="security"
+            label="Seguridad"
+          />
         </Tabs>
         <Box
           sx={{
@@ -59,6 +67,7 @@ export const PerfilUsuario = () => {
           }}
         >
           {tab === "settings" && <FormPerfilUsuario />}
+          {tab === "security" && <ConfiguracionSeguridad />}
         </Box>
       </Box>
     </Container>

@@ -39,6 +39,16 @@ export const authReducer = (state, action) => {
         ...state,
         loading: action.payload,
       };
+    case "SET_FACE_ID_PENDING":
+      return {
+        ...state,
+        faceIDPending: action.payload,
+      };
+    case "SET_PASSWORD_VERIFIED":
+      return {
+        ...state,
+        passwordVerified: action.payload,
+      };
     default:
       return state;
   }

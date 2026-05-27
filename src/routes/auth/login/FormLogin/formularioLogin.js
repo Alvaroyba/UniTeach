@@ -5,6 +5,7 @@ import { loginUser } from "../../../../service/authService";
 import showIcon from "../../../../Assest/show.png";
 import hideIcon from "../../../../Assest/hide.png";
 import { useTheme } from "../../../../contexts/themeContext";
+import VerificacionFaceID from "../../../../components/auth/verificacionFaceID/VerificacionFaceID";
 
 export const FormularioLogin = ({ onLoginSuccess }) => {
   const [Username, setUsername] = useState("");
@@ -16,6 +17,8 @@ export const FormularioLogin = ({ onLoginSuccess }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [capsLockOn, setCapsLockOn] = useState(false);
   const [shake, setShake] = useState(false);
+  const [faceIDPending, setFaceIDPending] = useState(false);
+  const [loginData, setLoginData] = useState(null);
   const goTo = useNavigate();
   const { darkMode, theme } = useTheme();
   /**
@@ -56,17 +59,37 @@ export const FormularioLogin = ({ onLoginSuccess }) => {
 
     try {
       const data = await loginUser({ Username, Password });
-      onLoginSuccess({
-        token: data.token,
-        user: data.user,
-      });
-      goTo("/app/home");
+      const hasFaceID = data.user?.faceIdEnabled || false;
+
+      if (hasFaceID) {
+        setLoginData({ token: data.token, user: data.user });
+        setFaceIDPending(true);
+      } else {
+        onLoginSuccess({
+          token: data.token,
+          user: data.user,
+        });
+        goTo("/app/home");
+      }
     } catch (error) {
       setErrorResponse(error.message);
     } finally {
       setIsLoading(false);
     }
   };
+
+  if (faceIDPending && loginData) {
+    return (
+      <div className="auth-login-container">
+        <div
+          className="auth-login-box"
+          style={{ backgroundColor: theme.palette.background.paper }}
+        >
+          <VerificacionFaceID />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="auth-login-container">

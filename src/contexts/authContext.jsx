@@ -7,9 +7,13 @@ const AuthContext = createContext({
   user: null,
   token: null,
   loading: true,
+  faceIDPending: false,
+  passwordVerified: false,
   handleLogin: () => {},
   handleLogout: () => {},
   setUser: () => {},
+  setFaceIDPending: () => {},
+  setPasswordVerified: () => {},
 });
 
 export const AuthProvider = ({ children }) => {
@@ -18,6 +22,8 @@ export const AuthProvider = ({ children }) => {
     user: null,
     token: null,
     loading: true,
+    faceIDPending: false,
+    passwordVerified: false,
   });
 
   useEffect(() => {
@@ -65,6 +71,14 @@ export const AuthProvider = ({ children }) => {
     dispatch({ type: "UPDATE_USER", payload: userData });
   };
 
+  const setFaceIDPending = (pending) => {
+    dispatch({ type: "SET_FACE_ID_PENDING", payload: pending });
+  };
+
+  const setPasswordVerified = (verified) => {
+    dispatch({ type: "SET_PASSWORD_VERIFIED", payload: verified });
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -72,6 +86,8 @@ export const AuthProvider = ({ children }) => {
         handleLogin,
         handleLogout,
         setUser: updateUser,
+        setFaceIDPending,
+        setPasswordVerified,
       }}
     >
       {children}
